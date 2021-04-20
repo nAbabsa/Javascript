@@ -2,67 +2,55 @@ import {Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import { AppService } from './app.service';
 import {filter} from "rxjs/operators";
 import { Todos } from 'Schemas/Todo.schema';
+import  TodoDto  from './types/TodoDto.interface';
 
-interface TodoDTO {
-  _id: string;
-  name: string;
-  state: 'DONE' | 'PENDING';
-}
 
-let TestTodo: TodoDTO[] = [
-  { _id: '0', name: 'AAA', state: 'DONE' },
-  { _id: '1', name: 'BBB', state: 'PENDING' },
-];
+
 
 @Controller('todos')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('/hello')
-  async getHello(): Promise<Todos[]> {
-    const todo = await this.appService.getHello();
-    console.log(todo);
-    return todo;
-  }
+
 
   @Get()
-  getTodos(): Array<TodoDTO> {
-    return TestTodo;
+  async getTodos(): Promise<Todos[]> {
+    const getTodo = await this.appService.getTodos();
+    return getTodo;
   }
 
 
   @Post()
-  async postTodos(@Body() todo): Promise<TodoDTO[]> {
-    todo._id = Math.random();
-    TestTodo.push(todo);
-    return todo;
+  async postTodos(@Body() todo:TodoDto): Promise<Todos> {
+    const AddTodo = await this.appService.postTodos(todo);
+    return AddTodo;
   }
 
-  @Delete('/completed')
-  deleteCompletedTodos(): Array<TodoDTO> {
-    const filterTodo = TestTodo.filter((ftodo) => ftodo.state != 'DONE');
-    TestTodo = filterTodo;
-    return [];
-    // return this.getTodos();
-  }
+  // @Delete('/completed')
+  // deleteCompletedTodos(): Array<TodoDTO> {
+  //   const filterTodo = TestTodo.filter((ftodo) => ftodo.state != 'DONE');
+  //   TestTodo = filterTodo;
+  //   return [];
+  //   // return this.getTodos();
+  // }
 
-  @Delete(':id')
-  async deleteTodos(@Param('id') id: string, @Body() todo): Promise<TodoDTO[]> {
-    const filterTodo = TestTodo.filter((ftodo) => ftodo._id != id);
-    TestTodo = filterTodo;
-    return todo;
-  }
+  // @Delete(':id')
+  // async deleteTodos(@Param('id') id: string, @Body() todo): Promise<Todos> {
+  //   const filterTodo = TestTodo.filter((ftodo) => ftodo._id != id);
+  //   TestTodo = filterTodo;
+  //   return todo;
+  // }
 
-  @Put(':id')
-  async putTodos(@Param('id') id: string, @Body() todo): Promise<TodoDTO[]> {
-    const filterTodo = TestTodo.filter((ftodo) => ftodo._id == id);
-    if (filterTodo[0].state == 'PENDING'){
-      filterTodo[0].state = 'DONE';
-    }else{
-      filterTodo[0].state = 'PENDING';
-    }
-    return todo;
-  }
+  // @Put(':id')
+  // async putTodos(@Param('id') id: string, @Body() todo): Promise<TodoDTO[]> {
+  //   const filterTodo = TestTodo.filter((ftodo) => ftodo._id == id);
+  //   if (filterTodo[0].state == 'PENDING'){
+  //     filterTodo[0].state = 'DONE';
+  //   }else{
+  //     filterTodo[0].state = 'PENDING';
+  //   }
+  //   return todo;
+  // }
 
 
 }
