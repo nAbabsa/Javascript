@@ -26,31 +26,24 @@ export class AppController {
     return AddTodo;
   }
 
-  // @Delete('/completed')
-  // deleteCompletedTodos(): Array<TodoDTO> {
-  //   const filterTodo = TestTodo.filter((ftodo) => ftodo.state != 'DONE');
-  //   TestTodo = filterTodo;
-  //   return [];
-  //   // return this.getTodos();
-  // }
+  @Delete('/completed')
+  async deleteCompletedTodos():  Promise<Todos[]>{
+    const getTodo = await this.appService.deleteCompleted();
+    return getTodo;
+  }
 
-  // @Delete(':id')
-  // async deleteTodos(@Param('id') id: string, @Body() todo): Promise<Todos> {
-  //   const filterTodo = TestTodo.filter((ftodo) => ftodo._id != id);
-  //   TestTodo = filterTodo;
-  //   return todo;
-  // }
+  @Delete(':id')
+  async deleteTodos(@Param('id') id: string): Promise<Todos[]> {
+    const getTodo = await this.appService.deleteTodos(id);
+    return getTodo;
+  }
 
-  // @Put(':id')
-  // async putTodos(@Param('id') id: string, @Body() todo): Promise<TodoDTO[]> {
-  //   const filterTodo = TestTodo.filter((ftodo) => ftodo._id == id);
-  //   if (filterTodo[0].state == 'PENDING'){
-  //     filterTodo[0].state = 'DONE';
-  //   }else{
-  //     filterTodo[0].state = 'PENDING';
-  //   }
-  //   return todo;
-  // }
+  @Put(':id')
+  async putTodos(@Param('id') id: string) {
+    const getTodo = await this.appService.putTodos(id);
+    return getTodo;
+  }
+
 
 
 }
